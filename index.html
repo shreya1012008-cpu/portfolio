@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Portfolio of Shreya K N – Computer Science Engineering Student" />
+  <meta name="theme-color" content="#050509" />
+  <title>Shreya K N | Portfolio</title>
+
+  <!-- Google Font (fast, with display=swap) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+/* =========================================================
+   Shreya K N – Portfolio Stylesheet
+   Sections:
+   1. Variables & Reset      6. Skills
+   2. Layout helpers         7. Projects
+   3. Navbar                 8. Education timeline
+   4. Hero / Home            9. Contact
+   5. About                 10. Footer, utilities, responsive
+   ========================================================= */
+
+/* ---------- 1. Variables & Reset ---------- */
+:root {
+  --bg: #050509;
+  --bg-soft: #0c0c14;
+  --card: rgba(255, 255, 255, 0.04);
+  --border: rgba(255, 255, 255, 0.09);
+  --text: #ffffff;
+  --muted: #a8a8bd;
+  --purple: #8b5cf6;
+  --blue: #3b82f6;
+  --gradient: linear-gradient(135deg, var(--purple), var(--blue));
+  --radius: 18px;
+  --shadow: 0 10px 40px rgba(0, 0, 0, 0.45);
+  --nav-h: 72px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; scroll-padding-top: var(--nav-h); }
+
+body {
+  font-family: "Poppins", system-ui, -apple-system, "Segoe UI", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+a { color: inherit; text-decoration: none; }
+ul { list-style: none; }
+img { max-width: 100%; display: block; }
+button { font-family: inherit; cursor: pointer; }
+
+::selection { background: var(--purple); color: #fff; }
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 9px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--gradient); border-radius: 10px; }
+
+/* ---------- 2. Layout helpers ---------- */
+.container { width: min(1140px, 92%); margin-inline: auto; }
+.section { padding: 100px 0; position: relative; }
+
+.gradient-text {
+  background: var(--gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.glass {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+}
+.glass:hover {
+  transform: translateY(-6px);
+  border-color: rgba(139, 92, 246, 0.55);
+  box-shadow: 0 14px 40px rgba(99, 102, 241, 0.18);
+}
+
+.section-head { text-align: center; margin-bottom: 56px; }
+.eyebrow {
+  color: var(--purple);
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-size: 0.82rem;
+}
+.section-title { font-size: clamp(2rem, 4vw, 2.8rem); font-weight: 700; }
+.section-sub { color: var(--muted); max-width: 560px; margin: 10px auto 0; }
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 13px 30px;
+  border-radius: 50px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  border: 2px solid transparent;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+}
+.btn:hover { transform: translateY(-3px); }
+.btn-primary { background: var(--gradient); color: #fff; box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4); }
+.btn-primary:hover { box-shadow: 0 12px 32px rgba(99, 102, 241, 0.6); }
+.btn-outline { border-color: var(--purple); color: #fff; background: transparent; }
+.btn-outline:hover { background: var(--gradient); border-color: transparent; }
+.btn.small { padding: 9px 22px; font-size: 0.88rem; }
+.btn.full { width: 100%; }
+
+/* Animated background blobs */
+.bg-glow { position: fixed; border-radius: 50%; filter: blur(130px); opacity: 0.22; z-index: -1; pointer-events: none; }
+.glow-1 { width: 480px; height: 480px; background: var(--purple); top: -120px; left: -140px; animation: drift 16s ease-in-out infinite alternate; }
+.glow-2 { width: 520px; height: 520px; background: var(--blue); bottom: -160px; right: -160px; animation: drift 20s ease-in-out infinite alternate-reverse; }
+@keyframes drift { to { transform: translate(70px, 50px) scale(1.15); } }
+
+/* Scroll reveal */
+.reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s ease, transform 0.8s ease; }
+.reveal.visible { opacity: 1; transform: none; }
+
+/* ---------- 3. Navbar ---------- */
+.navbar {
+  position: fixed; top: 0; left: 0; width: 100%;
+  height: var(--nav-h);
+  z-index: 1000;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+.navbar.scrolled {
+  background: rgba(5, 5, 9, 0.82);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 2px 25px rgba(0, 0, 0, 0.5);
+}
+.nav-inner { height: 100%; display: flex; align-items: center; justify-content: space-between; }
+.logo { font-size: 1.6rem; font-weight: 700; }
+.logo span { color: var(--purple); }
+
+.nav-links { display: flex; gap: 6px; }
+.nav-link {
+  position: relative;
+  padding: 8px 16px;
+  color: var(--muted);
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+.nav-link::after {
+  content: ""; position: absolute; left: 50%; bottom: 2px;
+  width: 0; height: 2px; background: var(--gradient);
+  transform: translateX(-50%); transition: width 0.3s ease; border-radius: 2px;
+}
+.nav-link:hover, .nav-link.active { color: #fff; }
+.nav-link:hover::after, .nav-link.active::after { width: 60%; }
+
+.menu-toggle { display: none; background: none; border: none; width: 32px; height: 26px; position: relative; }
+.menu-toggle span {
+  position: absolute; left: 0; width: 100%; height: 3px;
+  background: #fff; border-radius: 3px; transition: 0.3s ease;
+}
+.menu-toggle span:nth-child(1) { top: 0; }
+.menu-toggle span:nth-child(2) { top: 11px; }
+.menu-toggle span:nth-child(3) { top: 22px; }
+.menu-toggle.open span:nth-child(1) { top: 11px; transform: rotate(45deg); }
+.menu-toggle.open span:nth-child(2) { opacity: 0; }
+.menu-toggle.open span:nth-child(3) { top: 11px; transform: rotate(-45deg); }
+
+/* ---------- 4. Hero ---------- */
+.hero { min-height: 100vh; display: flex; align-items: center; padding: calc(var(--nav-h) + 30px) 0 60px; position: relative; }
+.hero-grid { display: grid; grid-template-columns: 1.15fr 0.85fr; align-items: center; gap: 50px; }
+.hero-text h1 { font-size: clamp(2.8rem, 7vw, 4.6rem); line-height: 1.1; font-weight: 700; margin: 6px 0; }
+.hero-title { font-size: clamp(1.1rem, 2.5vw, 1.6rem); font-weight: 500; color: #e5e5f0; }
+.typing-line { margin-top: 10px; color: var(--muted); font-size: 1.05rem; }
+.cursor { color: var(--purple); animation: blink 0.9s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+.hero-intro { color: var(--muted); max-width: 520px; margin: 18px 0 32px; }
+.hero-buttons { display: flex; flex-wrap: wrap; gap: 16px; }
+
+.hero-image { position: relative; display: flex; justify-content: center; }
+.avatar-ring {
+  width: min(340px, 78vw); aspect-ratio: 1; border-radius: 50%;
+  padding: 6px; background: conic-gradient(from 0deg, var(--purple), var(--blue), var(--purple));
+  animation: spin 8s linear infinite;
+  box-shadow: 0 0 70px rgba(99, 102, 241, 0.35);
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.avatar {
+  position: relative; width: 100%; height: 100%; border-radius: 50%;
+  background: var(--bg-soft); overflow: hidden;
+  display: grid; place-items: center;
+  animation: spin 8s linear infinite reverse;   /* cancels ring rotation so content stays upright */
+}
+.avatar-initials { font-size: 5rem; font-weight: 700; background: var(--gradient); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.avatar img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top center; }
+
+.floating-chip {
+  position: absolute; padding: 8px 16px; border-radius: 50px;
+  background: rgba(15, 15, 25, 0.85); border: 1px solid var(--border);
+  font-size: 0.85rem; font-weight: 500; backdrop-filter: blur(8px);
+  animation: float 4.5s ease-in-out infinite;
+}
+.chip-1 { top: 8%; left: 2%; }
+.chip-2 { bottom: 14%; left: -2%; animation-delay: 1s; }
+.chip-3 { top: 28%; right: -2%; animation-delay: 2s; }
+@keyframes float { 50% { transform: translateY(-14px); } }
+
+.scroll-down {
+  position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%);
+  width: 26px; height: 42px; border: 2px solid var(--muted); border-radius: 20px;
+}
+.scroll-down span {
+  position: absolute; top: 8px; left: 50%; width: 4px; height: 8px; margin-left: -2px;
+  background: var(--purple); border-radius: 4px; animation: wheel 1.6s infinite;
+}
+@keyframes wheel { 0% { opacity: 1; transform: translateY(0); } 100% { opacity: 0; transform: translateY(14px); } }
+
+/* ---------- 5. About ---------- */
+.about-grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: 30px; align-items: stretch; }
+.about-card { padding: 38px; }
+.about-card p { color: var(--muted); margin-bottom: 18px; }
+.stats { display: grid; grid-template-columns: 1fr; gap: 18px; }
+.stat { padding: 22px; text-align: center; }
+.stat h3 { font-size: 2.3rem; background: var(--gradient); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.stat p { color: var(--muted); font-size: 0.92rem; }
+
+/* ---------- 6. Skills ---------- */
+.skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; }
+.skill-card { padding: 30px 26px; text-align: center; position: relative; }
+.skill-icon {
+  width: 68px; height: 68px; margin: 0 auto 14px; border-radius: 18px;
+  display: grid; place-items: center;
+  background: var(--gradient); font-size: 1.5rem; font-weight: 700;
+  box-shadow: 0 8px 22px rgba(99, 102, 241, 0.4);
+  transition: transform 0.4s ease;
+}
+.skill-card:hover .skill-icon { transform: rotate(-8deg) scale(1.1); }
+.skill-card h3 { margin-bottom: 14px; font-weight: 600; }
+.bar { height: 8px; background: rgba(255, 255, 255, 0.08); border-radius: 10px; overflow: hidden; }
+.bar-fill { height: 100%; width: 0; background: var(--gradient); border-radius: 10px; transition: width 1.5s cubic-bezier(0.22, 1, 0.36, 1); }
+.percent { display: block; margin-top: 8px; color: var(--muted); font-size: 0.85rem; }
+
+/* ---------- 7. Projects ---------- */
+.projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 26px; }
+.project-card { overflow: hidden; display: flex; flex-direction: column; }
+.project-thumb { height: 150px; display: grid; place-items: center; font-size: 3.2rem; position: relative; overflow: hidden; }
+.project-thumb span { transition: transform 0.4s ease; }
+.project-card:hover .project-thumb span { transform: scale(1.25) rotate(6deg); }
+.thumb-1 { background: linear-gradient(135deg, #6d28d9, #2563eb); }
+.thumb-2 { background: linear-gradient(135deg, #7c3aed, #0ea5e9); }
+.thumb-3 { background: linear-gradient(135deg, #4f46e5, #9333ea); }
+.thumb-4 { background: linear-gradient(135deg, #2563eb, #7c3aed); }
+.project-body { padding: 24px; display: flex; flex-direction: column; flex: 1; }
+.project-body h3 { font-size: 1.15rem; margin-bottom: 8px; }
+.project-body p { color: var(--muted); font-size: 0.92rem; flex: 1; }
+.tags { display: flex; flex-wrap: wrap; gap: 8px; margin: 16px 0 20px; }
+.tags li {
+  font-size: 0.75rem; padding: 4px 12px; border-radius: 50px;
+  background: rgba(139, 92, 246, 0.14); color: #c4b5fd; border: 1px solid rgba(139, 92, 246, 0.3);
+}
+.project-body .btn { align-self: flex-start; }
+
+/* ---------- 8. Education timeline ---------- */
+.timeline { position: relative; max-width: 920px; margin: 0 auto; padding: 10px 0; }
+.timeline::before {
+  content: ""; position: absolute; left: 50%; top: 0; bottom: 0; width: 3px;
+  background: var(--gradient); transform: translateX(-50%); border-radius: 3px;
+}
+.timeline-item { position: relative; width: 50%; padding: 0 44px 40px; }
+.timeline-item.left { left: 0; }
+.timeline-item.right { left: 50%; }
+.timeline-dot {
+  position: absolute; top: 28px; width: 20px; height: 20px; border-radius: 50%;
+  background: var(--bg); border: 4px solid var(--purple);
+  box-shadow: 0 0 18px var(--purple);
+}
+.timeline-item.left .timeline-dot { right: -10px; }
+.timeline-item.right .timeline-dot { left: -10px; }
+.timeline-card { padding: 26px; }
+.year {
+  display: inline-block; font-size: 0.8rem; font-weight: 500; padding: 3px 14px;
+  border-radius: 50px; background: var(--gradient); margin-bottom: 10px;
+}
+.timeline-card h3 { font-size: 1.1rem; }
+.timeline-card h4 { color: #c4b5fd; font-weight: 500; font-size: 0.95rem; margin-bottom: 8px; }
+.timeline-card p { color: var(--muted); font-size: 0.9rem; }
+
+/* ---------- 9. Contact ---------- */
+.contact-grid { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 30px; }
+.contact-info { padding: 36px; display: flex; flex-direction: column; gap: 16px; align-items: flex-start; }
+.contact-info p { color: var(--muted); }
+.contact-line { font-size: 0.95rem; }
+.contact-form { padding: 36px; }
+.field { margin-bottom: 18px; }
+.field label { display: block; margin-bottom: 6px; font-size: 0.9rem; font-weight: 500; }
+.field input, .field textarea {
+  width: 100%; padding: 13px 16px; font-family: inherit; font-size: 0.95rem;
+  color: #fff; background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border); border-radius: 12px; outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.field textarea { resize: vertical; min-height: 120px; }
+.field input:focus, .field textarea:focus { border-color: var(--purple); box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.18); }
+.field.invalid input, .field.invalid textarea { border-color: #f87171; }
+.error { display: block; min-height: 18px; margin-top: 4px; color: #f87171; font-size: 0.8rem; }
+.form-status { margin-top: 14px; text-align: center; font-size: 0.92rem; min-height: 22px; }
+.form-status.success { color: #4ade80; }
+
+/* ---------- 10. Footer, utilities, responsive ---------- */
+.footer { border-top: 1px solid var(--border); padding: 36px 0; text-align: center; background: rgba(0, 0, 0, 0.4); }
+.footer-inner { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.footer p { color: var(--muted); font-size: 0.9rem; }
+.footer .logo { color: #fff; font-size: 1.4rem; }
+.footer-note { font-size: 0.8rem !important; }
+
+.to-top {
+  position: fixed; right: 24px; bottom: 24px; width: 46px; height: 46px;
+  border: none; border-radius: 50%; background: var(--gradient); color: #fff; font-size: 1.2rem;
+  box-shadow: 0 8px 22px rgba(99, 102, 241, 0.5);
+  opacity: 0; visibility: hidden; transform: translateY(20px);
+  transition: 0.3s ease; z-index: 900;
+}
+.to-top.show { opacity: 1; visibility: visible; transform: none; }
+.to-top:hover { transform: translateY(-4px); }
+
+/* Tablet */
+@media (max-width: 900px) {
+  .hero-grid { grid-template-columns: 1fr; text-align: center; }
+  .hero-text { order: 2; }
+  .hero-image { order: 1; }
+  .hero-intro { margin-inline: auto; }
+  .hero-buttons { justify-content: center; }
+  .about-grid, .contact-grid { grid-template-columns: 1fr; }
+  .stats { grid-template-columns: repeat(3, 1fr); }
+  .scroll-down { display: none; }
+}
+
+/* Mobile nav + timeline collapse */
+@media (max-width: 768px) {
+  .menu-toggle { display: block; }
+  .nav-links {
+    position: fixed; top: var(--nav-h); right: 0; width: 100%;
+    flex-direction: column; align-items: center; gap: 0;
+    background: rgba(5, 5, 9, 0.97); backdrop-filter: blur(14px);
+    padding: 12px 0 24px; border-bottom: 1px solid var(--border);
+    transform: translateY(-130%); opacity: 0; visibility: hidden;
+    transition: 0.4s ease;
+  }
+  .nav-links.open { transform: none; opacity: 1; visibility: visible; }
+  .nav-link { display: block; padding: 14px 20px; font-size: 1.05rem; }
+
+  .section { padding: 76px 0; }
+  .timeline::before { left: 18px; }
+  .timeline-item, .timeline-item.right { width: 100%; left: 0; padding: 0 0 32px 52px; }
+  .timeline-item.left .timeline-dot, .timeline-item.right .timeline-dot { left: 8px; right: auto; }
+  .chip-1, .chip-2, .chip-3 { display: none; }
+}
+
+@media (max-width: 480px) {
+  .stats { grid-template-columns: 1fr; }
+  .about-card, .contact-info, .contact-form { padding: 26px 22px; }
+  .btn { width: 100%; }
+  .hero-buttons { flex-direction: column; }
+  .project-body .btn, .about-card .btn { width: auto; }
+}
+
+/* Respect reduced-motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  .reveal { opacity: 1; transform: none; }
+}
+
+  </style>
+</head>
+<body>
+
+  <!-- Animated background glow blobs -->
+  <div class="bg-glow glow-1" aria-hidden="true"></div>
+  <div class="bg-glow glow-2" aria-hidden="true"></div>
+
+  <!-- =============== NAVIGATION =============== -->
+  <header class="navbar" id="navbar">
+    <nav class="nav-inner container" aria-label="Main navigation">
+      <a href="#home" class="logo">Shreya<span>.</span></a>
+
+      <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="navLinks">
+        <span></span><span></span><span></span>
+      </button>
+
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#home" class="nav-link active">Home</a></li>
+        <li><a href="#about" class="nav-link">About</a></li>
+        <li><a href="#skills" class="nav-link">Skills</a></li>
+        <li><a href="#projects" class="nav-link">Projects</a></li>
+        <li><a href="#education" class="nav-link">Education</a></li>
+        <li><a href="#contact" class="nav-link">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- =============== HOME =============== -->
+    <section id="home" class="hero">
+      <div class="container hero-grid">
+        <div class="hero-text reveal">
+          <p class="eyebrow">👋 Hello, I'm</p>
+          <h1>Shreya <span class="gradient-text">K N</span></h1>
+          <h2 class="hero-title">Computer Science Engineering Student</h2>
+          <p class="typing-line">I love <span id="typing" class="gradient-text"></span><span class="cursor">|</span></p>
+          <p class="hero-intro">
+            I'm a curious and driven engineering student who enjoys turning ideas into clean,
+            working software. I'm always learning, building, and looking for opportunities to grow.
+          </p>
+          <div class="hero-buttons">
+            <a href="#projects" class="btn btn-primary">View My Projects</a>
+            <a href="#contact" class="btn btn-outline">Contact Me</a>
+          </div>
+        </div>
+
+        <div class="hero-image reveal">
+          <div class="avatar-ring">
+            <div class="avatar">
+              <!-- Placeholder initials. To use your photo: save it as "profile.jpg"
+                   in this folder – it will automatically appear here. -->
+              <span class="avatar-initials">SK</span>
+              <img src="profile.jpg" alt="Portrait of Shreya K N" onerror="this.remove()" />
+            </div>
+          </div>
+          <div class="floating-chip chip-1">&lt;/&gt; Code</div>
+          <div class="floating-chip chip-2">🚀 Learn</div>
+          <div class="floating-chip chip-3">💡 Build</div>
+        </div>
+      </div>
+      <a href="#about" class="scroll-down" aria-label="Scroll to About section"><span></span></a>
+    </section>
+
+    <!-- =============== ABOUT =============== -->
+    <section id="about" class="section">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">Who I am</p>
+          <h2 class="section-title">About <span class="gradient-text">Me</span></h2>
+        </div>
+
+        <div class="about-grid">
+          <div class="about-card glass reveal">
+            <p>
+              I'm a passionate Computer Science Engineering student who enjoys programming,
+              learning new technologies, and developing creative solutions to real-world problems.
+            </p>
+            <p>
+              From writing efficient code in C and Java to building interactive web pages with
+              HTML, CSS and JavaScript, I love the process of taking a problem and shaping it into
+              something useful. I'm eager to collaborate, keep improving, and contribute to
+              meaningful projects.
+            </p>
+            <a href="#contact" class="btn btn-primary small">Let's Connect</a>
+          </div>
+
+          <div class="stats reveal">
+            <div class="stat glass"><h3 data-count="6">0</h3><p>Technologies</p></div>
+            <div class="stat glass"><h3 data-count="4">0</h3><p>Projects</p></div>
+            <div class="stat glass"><h3 data-count="100" data-suffix="%">0</h3><p>Dedication</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =============== SKILLS =============== -->
+    <section id="skills" class="section">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">What I know</p>
+          <h2 class="section-title">Technical <span class="gradient-text">Skills</span></h2>
+        </div>
+
+        <div class="skills-grid">
+          <article class="skill-card glass reveal">
+            <div class="skill-icon">&lt;/&gt;</div>
+            <h3>HTML</h3>
+            <div class="bar"><div class="bar-fill" data-level="90"></div></div>
+            <span class="percent">90%</span>
+          </article>
+
+          <article class="skill-card glass reveal">
+            <div class="skill-icon">{ }</div>
+            <h3>CSS</h3>
+            <div class="bar"><div class="bar-fill" data-level="85"></div></div>
+            <span class="percent">85%</span>
+          </article>
+
+          <article class="skill-card glass reveal">
+            <div class="skill-icon">JS</div>
+            <h3>JavaScript</h3>
+            <div class="bar"><div class="bar-fill" data-level="75"></div></div>
+            <span class="percent">75%</span>
+          </article>
+
+          <article class="skill-card glass reveal">
+            <div class="skill-icon">C</div>
+            <h3>C</h3>
+            <div class="bar"><div class="bar-fill" data-level="80"></div></div>
+            <span class="percent">80%</span>
+          </article>
+
+          <article class="skill-card glass reveal">
+            <div class="skill-icon">☕</div>
+            <h3>Java</h3>
+            <div class="bar"><div class="bar-fill" data-level="75"></div></div>
+            <span class="percent">75%</span>
+          </article>
+
+          <article class="skill-card glass reveal">
+            <div class="skill-icon">🐍</div>
+            <h3>Python</h3>
+            <div class="bar"><div class="bar-fill" data-level="85"></div></div>
+            <span class="percent">85%</span>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- =============== PROJECTS =============== -->
+    <section id="projects" class="section">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">My work</p>
+          <h2 class="section-title">Featured <span class="gradient-text">Projects</span></h2>
+          <p class="section-sub">Sample projects – edit the titles, descriptions and links to match your own work.</p>
+        </div>
+
+        <div class="projects-grid">
+          <!-- Project 1 -->
+          <article class="project-card glass reveal">
+            <div class="project-thumb thumb-1"><span>🌐</span></div>
+            <div class="project-body">
+              <h3>Personal Portfolio Website</h3>
+              <p>A responsive portfolio website showcasing my skills, projects and education with smooth animations.</p>
+              <ul class="tags"><li>HTML</li><li>CSS</li><li>JavaScript</li></ul>
+              <a href="#" class="btn btn-outline small" target="_blank" rel="noopener">View Project →</a>
+            </div>
+          </article>
+
+          <!-- Project 2 -->
+          <article class="project-card glass reveal">
+            <div class="project-thumb thumb-2"><span>📚</span></div>
+            <div class="project-body">
+              <h3>Library Management System</h3>
+              <p>A console-based Java application to add, search, issue and return books with file-based storage.</p>
+              <ul class="tags"><li>Java</li><li>OOP</li><li>File I/O</li></ul>
+              <a href="#" class="btn btn-outline small" target="_blank" rel="noopener">View Project →</a>
+            </div>
+          </article>
+
+          <!-- Project 3 -->
+          <article class="project-card glass reveal">
+            <div class="project-thumb thumb-3"><span>🤖</span></div>
+            <div class="project-body">
+              <h3>Smart Task Automation Tool</h3>
+              <p>A Python script that automates repetitive file organisation and report generation tasks.</p>
+              <ul class="tags"><li>Python</li><li>Automation</li><li>CLI</li></ul>
+              <a href="#" class="btn btn-outline small" target="_blank" rel="noopener">View Project →</a>
+            </div>
+          </article>
+
+          <!-- Project 4 -->
+          <article class="project-card glass reveal">
+            <div class="project-thumb thumb-4"><span>🧮</span></div>
+            <div class="project-body">
+              <h3>Student Record Manager</h3>
+              <p>A C program using structures and file handling to manage student marks and generate results.</p>
+              <ul class="tags"><li>C</li><li>Structures</li><li>Files</li></ul>
+              <a href="#" class="btn btn-outline small" target="_blank" rel="noopener">View Project →</a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- =============== EDUCATION =============== -->
+    <section id="education" class="section">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">My journey</p>
+          <h2 class="section-title"><span class="gradient-text">Education</span></h2>
+        </div>
+
+        <div class="timeline">
+          <div class="timeline-item left reveal">
+            <div class="timeline-dot"></div>
+            <div class="timeline-card glass">
+              <span class="year">20XX – 20XX</span>
+              <h3>B.E. in Computer Science &amp; Engineering</h3>
+              <h4>[Your College Name]</h4>
+              <p>Studying core subjects such as data structures, algorithms, operating systems and databases. Expected graduation: 20XX.</p>
+            </div>
+          </div>
+
+          <div class="timeline-item right reveal">
+            <div class="timeline-dot"></div>
+            <div class="timeline-card glass">
+              <span class="year">20XX – 20XX</span>
+              <h3>Pre-University / Higher Secondary</h3>
+              <h4>[Your PU College / School Name]</h4>
+              <p>Completed with a focus on Physics, Chemistry, Mathematics and Computer Science.</p>
+            </div>
+          </div>
+
+          <div class="timeline-item left reveal">
+            <div class="timeline-dot"></div>
+            <div class="timeline-card glass">
+              <span class="year">20XX</span>
+              <h3>Secondary School (SSLC / Class X)</h3>
+              <h4>[Your School Name]</h4>
+              <p>Built a strong academic foundation and first discovered my interest in computers and programming.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =============== CONTACT =============== -->
+    <section id="contact" class="section">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">Get in touch</p>
+          <h2 class="section-title">Contact <span class="gradient-text">Me</span></h2>
+          <p class="section-sub">Have a question, an opportunity or just want to say hi? My inbox is always open.</p>
+        </div>
+
+        <div class="contact-grid">
+          <div class="contact-info glass reveal">
+            <h3>Let's talk</h3>
+            <p>Reach out through the form or use the links below.</p>
+            <a class="btn btn-primary" href="mailto:your.email@example.com">✉ Email Me</a>
+            <a class="btn btn-outline" href="https://www.linkedin.com/in/your-linkedin-id" target="_blank" rel="noopener">in&nbsp; LinkedIn</a>
+            <p class="contact-line">📧 your.email@example.com</p>
+            <p class="contact-line">🎓 [Your College Name]</p>
+          </div>
+
+          <form id="contactForm" class="contact-form glass reveal" novalidate>
+            <div class="field">
+              <label for="name">Name</label>
+              <input type="text" id="name" name="name" placeholder="Your name" autocomplete="name" />
+              <small class="error" id="nameError"></small>
+            </div>
+            <div class="field">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" placeholder="you@example.com" autocomplete="email" />
+              <small class="error" id="emailError"></small>
+            </div>
+            <div class="field">
+              <label for="subject">Subject</label>
+              <input type="text" id="subject" name="subject" placeholder="What is this about?" />
+              <small class="error" id="subjectError"></small>
+            </div>
+            <div class="field">
+              <label for="message">Message</label>
+              <textarea id="message" name="message" rows="5" placeholder="Write your message..."></textarea>
+              <small class="error" id="messageError"></small>
+            </div>
+            <button type="submit" class="btn btn-primary full">Send Message</button>
+            <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- =============== FOOTER =============== -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <p class="logo">Shreya<span>.</span></p>
+      <p>© <span id="year">2026</span> Shreya K N. All rights reserved.</p>
+      <p class="footer-note">Designed &amp; built with ❤ using HTML, CSS &amp; JavaScript</p>
+    </div>
+  </footer>
+
+  <!-- Back to top button -->
+  <button class="to-top" id="toTop" aria-label="Back to top">↑</button>
+
+  <script>
+/* =========================================================
+   Shreya K N – Portfolio Script
+   1. Mobile menu            5. Scroll reveal + skill bars + counters
+   2. Navbar scroll state    6. Typing effect
+   3. Active link highlight  7. Contact form validation
+   4. Back-to-top button     8. Footer year
+   ========================================================= */
+
+document.addEventListener("DOMContentLoaded", () => {
+  const navbar = document.getElementById("navbar");
+  const menuToggle = document.getElementById("menuToggle");
+  const navLinks = document.getElementById("navLinks");
+  const links = document.querySelectorAll(".nav-link");
+  const toTop = document.getElementById("toTop");
+
+  /* ---------- 1. Mobile menu ---------- */
+  const closeMenu = () => {
+    menuToggle.classList.remove("open");
+    navLinks.classList.remove("open");
+    menuToggle.setAttribute("aria-expanded", "false");
+  };
+
+  menuToggle.addEventListener("click", () => {
+    const isOpen = navLinks.classList.toggle("open");
+    menuToggle.classList.toggle("open", isOpen);
+    menuToggle.setAttribute("aria-expanded", String(isOpen));
+  });
+
+  // Close menu after clicking a link (smooth scroll handled by CSS)
+  links.forEach((link) => link.addEventListener("click", closeMenu));
+
+  /* ---------- 2 & 4. Navbar style + back-to-top on scroll ---------- */
+  const onScroll = () => {
+    navbar.classList.toggle("scrolled", window.scrollY > 40);
+    toTop.classList.toggle("show", window.scrollY > 500);
+  };
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+
+  toTop.addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+
+  /* ---------- 3. Highlight the active nav link ---------- */
+  const sections = document.querySelectorAll("main section[id]");
+  const sectionObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          links.forEach((l) =>
+            l.classList.toggle("active", l.getAttribute("href") === `#${entry.target.id}`)
+          );
+        }
+      });
+    },
+    { rootMargin: "-45% 0px -50% 0px" }
+  );
+  sections.forEach((s) => sectionObserver.observe(s));
+
+  /* ---------- 5. Scroll reveal, skill bars, counters ---------- */
+  const animateCounter = (el) => {
+    const target = Number(el.dataset.count);
+    const suffix = el.dataset.suffix || "+";
+    const duration = 1400;
+    const start = performance.now();
+    const tick = (now) => {
+      const progress = Math.min((now - start) / duration, 1);
+      el.textContent = Math.floor(progress * target) + (progress === 1 ? suffix : "");
+      if (progress < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  };
+
+  const revealObserver = new IntersectionObserver(
+    (entries, observer) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        const el = entry.target;
+        el.classList.add("visible");
+
+        // Fill skill progress bar
+        const fill = el.querySelector(".bar-fill");
+        if (fill) fill.style.width = fill.dataset.level + "%";
+
+        // Run stat counters
+        el.querySelectorAll("[data-count]").forEach(animateCounter);
+
+        observer.unobserve(el);
+      });
+    },
+    { threshold: 0.15 }
+  );
+  document.querySelectorAll(".reveal").forEach((el, i) => {
+    el.style.transitionDelay = `${(i % 4) * 90}ms`; // gentle stagger
+    revealObserver.observe(el);
+  });
+
+  /* ---------- 6. Typing effect ---------- */
+  const typingEl = document.getElementById("typing");
+  const phrases = ["coding in C & Java", "building web apps", "solving problems", "learning new tech"];
+  let phraseIndex = 0, charIndex = 0, deleting = false;
+
+  const type = () => {
+    const current = phrases[phraseIndex];
+    typingEl.textContent = current.slice(0, charIndex);
+
+    if (!deleting && charIndex < current.length) {
+      charIndex++;
+      setTimeout(type, 85);
+    } else if (!deleting) {
+      deleting = true;
+      setTimeout(type, 1400);   // pause at end of phrase
+    } else if (charIndex > 0) {
+      charIndex--;
+      setTimeout(type, 45);
+    } else {
+      deleting = false;
+      phraseIndex = (phraseIndex + 1) % phrases.length;
+      setTimeout(type, 300);
+    }
+  };
+  type();
+
+  /* ---------- 7. Contact form validation ---------- */
+  const form = document.getElementById("contactForm");
+  const status = document.getElementById("formStatus");
+  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+  // Rules for each field: returns an error string, or "" if valid
+  const rules = {
+    name: (v) => (v.length < 2 ? "Please enter your name (at least 2 characters)." : ""),
+    email: (v) => (!emailPattern.test(v) ? "Please enter a valid email address." : ""),
+    subject: (v) => (v.length < 3 ? "Please enter a subject (at least 3 characters)." : ""),
+    message: (v) => (v.length < 10 ? "Message should be at least 10 characters." : ""),
+  };
+
+  const validateField = (name) => {
+    const input = form.elements[name];
+    const error = rules[name](input.value.trim());
+    document.getElementById(`${name}Error`).textContent = error;
+    input.closest(".field").classList.toggle("invalid", Boolean(error));
+    return !error;
+  };
+
+  // Live validation once the user leaves a field
+  Object.keys(rules).forEach((name) => {
+    form.elements[name].addEventListener("blur", () => validateField(name));
+    form.elements[name].addEventListener("input", () => {
+      if (form.elements[name].closest(".field").classList.contains("invalid")) validateField(name);
+    });
+  });
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    status.className = "form-status";
+    status.textContent = "";
+
+    const allValid = Object.keys(rules).map(validateField).every(Boolean);
+    if (!allValid) {
+      status.textContent = "Please fix the highlighted fields.";
+      return;
+    }
+
+    /* This portfolio has no backend, so the message opens in the visitor's
+       email app. Replace the address below with your own email.
+       (Or connect a service like Formspree / EmailJS for direct delivery.) */
+    const myEmail = "your.email@example.com";
+    const { name, email, subject, message } = form.elements;
+    const body = `Name: ${name.value.trim()}\nEmail: ${email.value.trim()}\n\n${message.value.trim()}`;
+    window.location.href =
+      `mailto:${myEmail}?subject=${encodeURIComponent(subject.value.trim())}&body=${encodeURIComponent(body)}`;
+
+    status.classList.add("success");
+    status.textContent = "Thank you! Your email app should open with the message ready to send.";
+    form.reset();
+  });
+
+  /* ---------- 8. Footer year ---------- */
+  document.getElementById("year").textContent = new Date().getFullYear();
+});
+
+  </script>
+</body>
+</html>
